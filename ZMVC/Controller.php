@@ -10,21 +10,18 @@
 		public function __construct($ZMVC)
 		{
 			// Find page and params
-			$URLParts = (strlen($ZMVC->Route("Page")) > 0) ? explode("/", $ZMVC->Route("Page")) : array();
-			if(count($URLParts) > 0 && $URLParts[count($URLParts)-1] == "") unset($URLParts[count($URLParts)-1]);
-
-			for($I = count($URLParts)-1; $I >= -1; $I--)
+			for($I = count($ZMVC->URLParts)-1; $I >= -1; $I--)
 			{
-				$CheckView = ($I >= 0) ? implode("/", array_slice($URLParts, 0, $I+1)) : "";
+				$CheckView = ($I >= 0) ? implode("/", array_slice($ZMVC->URLParts, 0, $I+1)) : "";
 
 				if(file_exists($ZMVC->Route(array("Root", "ApplicationViews"), $CheckView).".php"))
 					$FinalPage = $CheckView;
 				else if(file_exists($ZMVC->Route(array("Root", "ApplicationViews"), $CheckView."/".$ZMVC->GetConfig("DefaultPage")).".php"))
 					$FinalPage = $CheckView."/".$ZMVC->GetConfig("DefaultPage");
 				
-				if($FinalPage != null)
+				if(!isset($FinalPage))
 				{
-					$PassParams = array_slice($URLParts, $I+1);
+					$PassParams = array_slice($ZMVC->URLParts, $I+1);
 					break;
 				}
 			}

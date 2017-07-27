@@ -10,7 +10,7 @@
 
 		public $PagePath = "";
 		public $PageTemplate = "";
-
+		
 		private $Model = null;
 
 		public function __construct($_Model, $ViewPath)
