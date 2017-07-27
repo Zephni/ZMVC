@@ -20,6 +20,8 @@
 			$this->ModelAlias = $_ModelAlias;
 			$this->PageTemplate = $this->ZMVC->GetConfig("DefaultTemplate");
 
+
+
 			$_GET = array();
 			for($I = 1; $I <= count($PassData); $I++)
 				$_GET["param_".$I] = $PassData[$I-1];

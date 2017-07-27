@@ -13,17 +13,14 @@
 
 		private $Model = null;
 
-		public function __construct($_Model)
+		public function __construct($_Model, $ViewPath)
 		{
 			$this->Model = $_Model;
-		}
 
-		public function Output()
-		{
 			extract($this->Model->GetData());
 			$ZMVC = $this->Model->ZMVC;
 			
-			$this->PagePath = $ZMVC->Route("Root").$ZMVC->Route("ApplicationViews")."/".$this->Model->ModelAlias.".php";
+			$this->PagePath = $ZMVC->Route("Root").$ZMVC->Route("ApplicationViews")."/".$ViewPath.".php";
 
 			ob_start();
 			require_once($ZMVC->Route("Root").$ZMVC->Route("ApplicationTemplates")."/".$this->Model->PageTemplate.".php");

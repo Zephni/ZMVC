@@ -33,7 +33,6 @@
 			$this->Routes["ApplicationModels"]		= $this->Config["ApplicationPath"]."/Models";
 			$this->Routes["ApplicationViews"]		= $this->Config["ApplicationPath"]."/Views";
 			$this->Routes["ApplicationControllers"]	= $this->Config["ApplicationPath"]."/Controllers";
-			$this->Routes["ApplicationCSS"]			= $this->Config["ApplicationPath"]."/CSS";
 		}
 
 		public function SetConfig($Key, $Value)
@@ -61,7 +60,7 @@
 				foreach($Key as $Item)
 					$Path .= $this->Route($Item);
 
-				return $Path.$Append;
+				return str_replace("//", "/", $Path.$Append);
 			}
 		}
 	}

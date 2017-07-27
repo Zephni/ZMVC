@@ -9,13 +9,33 @@
 		*/
 		public function __construct($ZMVC)
 		{
-			$PageParts = explode("/", ($ZMVC->Route("Page") != "") ? $ZMVC->Route("Page") : $ZMVC->GetConfig("DefaultPage"));
+			// Find page and params
+			$URLParts = (strlen($ZMVC->Route("Page")) > 0) ? explode("/", $ZMVC->Route("Page")) : array();
+			if(count($URLParts) > 0 && $URLParts[count($URLParts)-1] == "") unset($URLParts[count($URLParts)-1]);
 
-			if(!file_exists($ZMVC->Route("Root").$ZMVC->Route("ApplicationModels")."/".$PageParts[0].".php"))
-				array_unshift($PageParts, "home");
+			for($I = count($URLParts)-1; $I >= -1; $I--)
+			{
+				$CheckView = ($I >= 0) ? implode("/", array_slice($URLParts, 0, $I+1)) : "";
 
-			$Model = new Model($ZMVC, $PageParts[0], array_slice($PageParts, 1));
-			$View = new View($Model);
-			$View->Output();
+				if(file_exists($ZMVC->Route(array("Root", "ApplicationViews"), $CheckView).".php"))
+					$FinalPage = $CheckView;
+				else if(file_exists($ZMVC->Route(array("Root", "ApplicationViews"), $CheckView."/".$ZMVC->GetConfig("DefaultPage")).".php"))
+					$FinalPage = $CheckView."/".$ZMVC->GetConfig("DefaultPage");
+				
+				if($FinalPage != null)
+				{
+					$PassParams = array_slice($URLParts, $I+1);
+					break;
+				}
+			}
+
+			if(!isset($FinalPage))
+				$FinalPage = $ZMVC->GetConfig("DefaultPage");
+			if(!isset($PassParams))
+				$PassParams = array();
+			// Find page and params
+
+			$Model = new Model($ZMVC, $FinalPage, $PassParams);
+			$View = new View($Model, $FinalPage);
 		}
 	}
