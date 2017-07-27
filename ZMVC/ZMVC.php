@@ -27,6 +27,7 @@
 			$this->Config["PageRequestVariable"]	= "page";
 			$this->Config["DefaultTemplate"]		= "main";
 			$this->Config["DefaultPage"]			= "home";
+			$this->Config["DefaultAcceptParams"]	= true;
 
 			// Insert/Update config
 			foreach($_Config as $K => $V)

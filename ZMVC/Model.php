@@ -11,16 +11,17 @@
 		public $PageTemplate = "";
 		public $ModelAlias = "";
 		public $ZMVC = null;
+		public $AcceptParams = true;
 
 		private $Data = array();
 
 		public function __construct($_ZMVC, $_ModelAlias, $PassData)
 		{
 			$this->ZMVC = $_ZMVC;
+			$this->AcceptParams = $this->ZMVC->GetConfig("DefaultAcceptParams");
+
 			$this->ModelAlias = $_ModelAlias;
 			$this->PageTemplate = $this->ZMVC->GetConfig("DefaultTemplate");
-
-
 
 			$_GET = array();
 			for($I = 1; $I <= count($PassData); $I++)
