@@ -1,0 +1,1 @@
+<p>Main <?php echo $Text; ?></p>

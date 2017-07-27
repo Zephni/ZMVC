@@ -1,0 +1,4 @@
+#ZMVC
+
+RewriteEngine On
+RewriteRule	^([0-9a-zA-Z_=/&\-]+)$	index.php [L,QSA]
