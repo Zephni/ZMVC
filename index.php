@@ -10,6 +10,7 @@
 	// Initialise ZMVC
 	$ZMVC = new ZMVC(array(
 		// Custom configuration
+		"Applications" => array(/*"admin" => "Admin"*/)
 	));
 	
 	// Check if application is valid
