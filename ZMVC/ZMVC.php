@@ -35,7 +35,7 @@
 
 			// Routes
 			$this->Routes["Root"]					= substr(dirname(__FILE__), 0, -strlen($this->Config["ZMVCPath"]));
-			$this->Routes["Page"]					= ltrim($_SERVER["REQUEST_URI"], rtrim($_SERVER["SCRIPT_NAME"], "/index.php"));
+			$this->Routes["Page"]					= ltrim($_SERVER["REQUEST_URI"], substr($_SERVER["SCRIPT_NAME"], 0, strlen($_SERVER["SCRIPT_NAME"])-strlen("/index.php")));
 			$this->Routes["Local"]					= rtrim(rtrim($_SERVER["REQUEST_URI"], $this->Route("Page")), "/");
 
 			// Application routes
