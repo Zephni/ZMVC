@@ -34,8 +34,15 @@
 				$PassParams = array();
 			// Find page and params
 
+			// Include common classes / functions for application
+			if(is_dir($ZMVC->Route(array("Root"), $ZMVC->ApplicationPath."/Common")))
+				foreach(glob($ZMVC->Route(array("Root"), $ZMVC->ApplicationPath."/Common/*.php")) as $File)
+					include_once($File);
+
+			// Initiate model
 			$Model = new Model($ZMVC, $FinalPage, $PassParams);
 
+			// Initiate view
 			if(count($PassParams) > 0 && !$Model->AcceptParams)
 				$View = new View(new Model($ZMVC, "404", array()), "404");
 			else

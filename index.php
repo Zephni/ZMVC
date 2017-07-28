@@ -12,5 +12,10 @@
 		// Custom configuration
 	));
 
+	// Include common classes / functions
+	if(is_dir($ZMVC->Route(array("Root"), "Common")))
+		foreach(glob($ZMVC->Route(array("Root"), "Common/*.php")) as $File)
+			include_once($File);
+
 	// Invoke controller
 	$Controller = new Controller($ZMVC);
