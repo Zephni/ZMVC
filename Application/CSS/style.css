@@ -14,10 +14,10 @@ pre {padding: 12px; width: 100%; background: #121C21; color: white; margin: 15px
 #TopBar {width: 100%; border-spacing: border-box; padding: 10px 0; background: #333340; color: white; text-align: right; z-index: 2;}
 #TopBar a {color: white; padding: 15px 20px; font-size: 16px; font-family: "Open Sans Condensed";}
 #TopBar a.selected {background: #444450; color: #EEEEF0;}
-#TopBar #LogoBlock {width: 200px; height: 270px; background: url("/zephni/Application/Images/logoblock.png"); background-size: 100% 100%; position: absolute; top: 110px; left: 50%; margin-left: -100px; opacity: 0.8;}
+#TopBar #LogoBlock {width: 200px; height: 270px; background: url("../../Application/Images/logoblock.png"); background-size: 100% 100%; position: absolute; top: 110px; left: 50%; margin-left: -100px; opacity: 0.8;}
 
 #Header {width: 100%; height: 300px;}
-#Header .InnerContainer {width: 100%; height: 100%; background: url("/zephni/Application/Images/header.jpg") center top; background-size: 100%;}
+#Header .InnerContainer {width: 100%; height: 100%; background: url("../../Application/Images/header.jpg") center top; background-size: 100%;}
 #Header .InnerContainer * {position: absolute; color: white;}
 
 #Body p {line-height: 20px;}

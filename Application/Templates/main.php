@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Zephni</title>
+		<title>ZMVC PHP Framework</title>
 		<link rel="stylesheet" type="text/css" href="/<?php echo $ZMVC->Route(array("Local", "Application"), "CSS/style.css"); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
@@ -13,7 +13,7 @@
 						"" => "HOME",
 						"guide" => "GUIDE"
 					) as $K => $V){
-						echo "<a href='/".$ZMVC->Route(array("Local"), $K)."' class='".(($K == $ZMVC->Route(array("Page"))) ? "selected" : "")."'>".$V."</a> ";
+						echo "<a href='/".$ZMVC->Route(array("Local"), $K)."' class='".(($K == $ZMVC->Route(array("Page")) || ($K == "home" && isset($ZMVC->URLParts[0]) && $ZMVC->URLParts[0] == "home")) ? "selected" : "")."'>".$V."</a> ";
 					}
 				?>
 			</div>
