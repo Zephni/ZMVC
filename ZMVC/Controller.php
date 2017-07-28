@@ -34,9 +34,14 @@
 				$PassParams = array();
 			// Find page and params
 
-			// Include common classes / functions for application
-			if(is_dir($ZMVC->Route(array("Root"), $ZMVC->ApplicationPath."/Common")))
-				foreach(glob($ZMVC->Route(array("Root"), $ZMVC->ApplicationPath."/Common/*.php")) as $File)
+			// Include global common *.php files
+			if(is_dir($ZMVC->Route(array("Root"), "Common")))
+				foreach(glob($ZMVC->Route(array("Root"), "Common/*.php")) as $File)
+					include_once($File);
+
+			// Include application common *.php files
+			if(is_dir($ZMVC->Route(array("Root", "Application"), "Common")))
+				foreach(glob($ZMVC->Route(array("Root", "Application"), "Common/*.php")) as $File)
 					include_once($File);
 
 			// Initiate model

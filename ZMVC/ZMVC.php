@@ -49,6 +49,7 @@
 				$this->URLParts = array_slice($this->URLParts, 1);
 			}
 			
+			$this->Routes["Application"]			= $this->ApplicationPath;
 			$this->Routes["ApplicationTemplates"]	= $this->ApplicationPath.$this->Config["ApplicationTemplates"];
 			$this->Routes["ApplicationModels"]		= $this->ApplicationPath.$this->Config["ApplicationModels"];
 			$this->Routes["ApplicationViews"]		= $this->ApplicationPath.$this->Config["ApplicationViews"];
@@ -82,5 +83,18 @@
 
 				return str_replace("//", "/", $Path.$Append);
 			}
+		}
+
+		public function IsValidApplication(&$ApplicationError = "")
+		{
+			foreach(array("", "Models", "Templates", "Views") as $Dir)
+				if(!is_dir($this->Route(array("Root", "Application"), $Dir)))
+				{
+					$ApplicationError = "'".$this->ApplicationPath.$Dir."' does not exist, cannot launch applicaiton.";
+					return false;
+				}
+
+			unset($ApplicationError);
+			return true;
 		}
 	}
