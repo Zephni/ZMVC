@@ -34,9 +34,10 @@
 				$this->Config[$K] = $V;
 
 			// Routes
+			//die("<pre>".print_r($_SERVER, true)."</pre>");
 			$this->Routes["Root"]					= substr(dirname(__FILE__), 0, -strlen($this->Config["ZMVCPath"]));
-			$this->Routes["Page"]					= ltrim($_SERVER["REQUEST_URI"], substr($_SERVER["SCRIPT_NAME"], 0, strlen($_SERVER["SCRIPT_NAME"])-strlen("/index.php")));
-			$this->Routes["Local"]					= rtrim(rtrim($_SERVER["REQUEST_URI"], $this->Route("Page")), "/");
+			$this->Routes["Local"]					= ltrim($this->Routes["Root"], $_SERVER["DOCUMENT_ROOT"]);
+			$this->Routes["Page"]					= substr($_SERVER["REQUEST_URI"], strlen("/".$this->Routes["Local"]."/"));
 
 			// Application routes
 			$this->URLParts = (strlen($this->Route("Page")) > 0) ? explode("/", $this->Route("Page")) : array();
@@ -45,7 +46,7 @@
 			$this->ApplicationPath = $this->Config["DefaultApplication"];
 			if(isset($this->URLParts[0]) && in_array($this->URLParts[0], $this->Config["Applications"]))
 			{
-				$this->ApplicationPath = "/".$this->URLParts[0];
+				$this->ApplicationPath = "/".$this->Config["Applications"][$this->URLParts[0]];
 				$this->URLParts = array_slice($this->URLParts, 1);
 			}
 			
