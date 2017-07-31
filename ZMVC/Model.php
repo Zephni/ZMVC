@@ -17,21 +17,25 @@
 
 		public function __construct($_ZMVC, $_ModelAlias, $PassData)
 		{
-			$this->ZMVC = $_ZMVC;
-			$this->AcceptParams = $this->ZMVC->GetConfig("DefaultAcceptParams");
+			$ZMVC = $_ZMVC;
+			$this->AcceptParams = $ZMVC->GetConfig("DefaultAcceptParams");
 
 			$this->ModelAlias = $_ModelAlias;
-			$this->PageTemplate = $this->ZMVC->GetConfig("DefaultTemplate");
+			$this->PageTemplate = $ZMVC->GetConfig("DefaultTemplate");
 
 			$_GET = array();
 			for($I = 1; $I <= count($PassData); $I++)
 				$_GET["param_".$I] = $PassData[$I-1];
 
-			if(file_exists($this->ZMVC->Route("Root").$this->ZMVC->Route("ApplicationModels")."/".$_ModelAlias.".php"))
-			{
-				require_once($this->ZMVC->Route("Root").$this->ZMVC->Route("ApplicationModels")."/".$_ModelAlias.".php");
-				$this->Data = get_defined_vars();
-			}
+			if(file_exists($ZMVC->Route("Root").$ZMVC->Route("ApplicationModels")."/".$_ModelAlias.".php"))
+				require_once($ZMVC->Route("Root").$ZMVC->Route("ApplicationModels")."/".$_ModelAlias.".php");
+
+			if(file_exists($ZMVC->Route("Root").$ZMVC->Route("ApplicationTemplates")."/".$this->PageTemplate."_model.php"))
+				require_once($ZMVC->Route("Root").$ZMVC->Route("ApplicationTemplates")."/".$this->PageTemplate."_model.php");
+
+			$this->Data = get_defined_vars();
+
+			$this->ZMVC = $_ZMVC;
 		}
 
 		public function GetData()
