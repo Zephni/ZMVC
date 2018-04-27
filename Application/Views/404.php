@@ -1,1 +1,1 @@
-<p><b>404</b> - Page coud not be found</p>
+<p><b>404</b> - Page could not be found</p>
