@@ -1,101 +1,68 @@
 <?php
 	class ZMVC
 	{
-		/*
-			ZMVC:
-				1. Sets the default config
-				2. Applies custom config
-				3. Sets routing properties
-		*/
+		/* -----------------------------------
+		Config
+		----------------------------------- */
+		private $Config = array();
 
-		public $Config	= array();
-		public $ApplicationPath = null;
-		public $URLParts = null;
-
-		private $Routes	= array();
-
-		public function __construct($_Config = array())
-		{
-			// Default config
-			$this->Config["ZMVCPath"]				= "/ZMVC";
-			$this->Config["Applications"]			= array();
-			$this->Config["DefaultApplication"]		= "/Application";
-			$this->Config["ApplicationTemplates"]	= "/Templates";
-			$this->Config["ApplicationModels"]		= "/Models";
-			$this->Config["ApplicationViews"]		= "/Views";
-			$this->Config["ApplicationControllers"]	= "/Controllers";
-			$this->Config["PageRequestVariable"]	= "page";
-			$this->Config["DefaultTemplate"]		= "main";
-			$this->Config["DefaultPage"]			= "home";
-			$this->Config["DefaultAcceptParams"]	= true;
-
-			// Insert/Update config
-			foreach($_Config as $K => $V)
-				$this->Config[$K] = $V;
-
-			// Routes
-			//die("<pre>".print_r($_SERVER, true)."</pre>");
-			$this->Routes["Root"]					= substr(dirname(__FILE__), 0, -strlen($this->Config["ZMVCPath"]));
-			$this->Routes["Local"]					= ltrim($this->Routes["Root"], $_SERVER["DOCUMENT_ROOT"]);
-			$this->Routes["Page"]					= substr($_SERVER["REQUEST_URI"], strlen("/".$this->Routes["Local"]."/"));
-
-			// Application routes
-			$this->URLParts = (strlen($this->Route("Page")) > 0) ? explode("/", $this->Route("Page")) : array();
-			if(count($this->URLParts) > 0 && $this->URLParts[count($this->URLParts)-1] == "") unset($this->URLParts[count($this->URLParts)-1]);
-
-			$this->ApplicationPath = $this->Config["DefaultApplication"];
-			if(isset($this->URLParts[0]) && in_array($this->URLParts[0], $this->Config["Applications"]))
-			{
-				$this->ApplicationPath = "/".$this->Config["Applications"][$this->URLParts[0]];
-				$this->URLParts = array_slice($this->URLParts, 1);
-			}
-			
-			$this->Routes["Application"]			= $this->ApplicationPath;
-			$this->Routes["ApplicationTemplates"]	= $this->ApplicationPath.$this->Config["ApplicationTemplates"];
-			$this->Routes["ApplicationModels"]		= $this->ApplicationPath.$this->Config["ApplicationModels"];
-			$this->Routes["ApplicationViews"]		= $this->ApplicationPath.$this->Config["ApplicationViews"];
-			$this->Routes["ApplicationControllers"]	= $this->ApplicationPath.$this->Config["ApplicationControllers"];
-		}
-
+		/* -----------------------------------
+		SetConfig
+		----------------------------------- */
 		public function SetConfig($Key, $Value)
 		{
 			$this->Config[$Key] = $Value;
 		}
 
+		/* -----------------------------------
+		GetConfig
+		----------------------------------- */
 		public function GetConfig($Key)
 		{
-			return $this->Config[$Key];
+			if(isset($this->Config[$Key]))
+				return $this->Config[$Key];
+			else
+				return null;
 		}
 
-		public function Route($Key, $Append = "")
+		/* -----------------------------------
+		GetApplication
+		----------------------------------- */
+		public function GetApplication($RequestPath)
 		{
-			if(strlen($Append) > 0)
-				$Append = "/".ltrim($Append);
-
-			if(is_string($Key))
-			{
-				return $this->Routes[$Key].$Append;
-			}
-			else if(is_array($Key))
-			{
-				$Path = "";
-				foreach($Key as $Item)
-					$Path .= $this->Route($Item);
-
-				return str_replace("//", "/", $Path.$Append);
-			}
+			$RequestParts = array_filter(explode("/", $RequestPath), "strlen");
 		}
 
-		public function IsValidApplication(&$ApplicationError = "")
+		/* -----------------------------------
+		GetPagePath
+		----------------------------------- */
+		public function GetPagePath($RequestPath)
 		{
-			foreach(array("", "Models", "Templates", "Views") as $Dir)
-				if(!is_dir($this->Route(array("Root", "Application"), $Dir)))
+			$RequestParts = array_filter(explode("/", $RequestPath), "strlen");
+			$IteratedFoundDirectory = array();
+			$IteratedPathParts = array();
+			$IteratedPath = "";
+
+			if(count($RequestParts) == 0)
+			{
+				return "home";
+			}
+			else
+			{
+				for($I = 0; $I < count($RequestParts); $I++)
 				{
-					$ApplicationError = "'".$this->ApplicationPath.$Dir."' does not exist, cannot launch applicaiton.";
-					return false;
+					$IteratedPathParts[] = $RequestParts[$I];
+					$IteratedPath = implode("/", $IteratedPathParts);
+					
+					if(is_dir(ROOT_DIR."/".$this->GetConfig("Application")."/views/".$IteratedPath))
+						$IteratedFoundDirectory[] = $RequestParts[$I];
 				}
 
-			unset($ApplicationError);
-			return true;
+				$FinalPage = implode("/", $IteratedFoundDirectory)."/".((count($IteratedFoundDirectory) == count($RequestParts)) ? "home" : $RequestParts[count($RequestParts)-1]);
+				return (file_exists($this->GetConfig("Application")."/views/".$FinalPage.".php")) ? $FinalPage : "404";
+
+			}
+
+			return "home";
 		}
 	}

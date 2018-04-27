@@ -1,2 +1,2 @@
 <?php
-	$this->AcceptParams = false;
+	
